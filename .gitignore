@@ -1,0 +1,14 @@
+# Review output files
+review-inline*.txt
+review-metadata*.json
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

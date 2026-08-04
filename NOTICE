@@ -1,0 +1,40 @@
+sashiko-shi
+Copyright 2025 sashiko-shi contributors
+
+This project implements an 11-stage agentic code review protocol for OpenCode,
+derived from the Sashiko project's review architecture.
+
+================================================================================
+
+This project includes material derived from the following projects:
+
+--------------------------------------------------------------------------------
+Sashiko - Agentic review of Linux Kernel code changes
+Copyright The Linux Foundation and its contributors. All rights reserved.
+Licensed under the Apache License, Version 2.0
+https://github.com/sashiko-dev/sashiko
+
+The 11-stage review protocol (stage prompt structure, stage sequencing,
+concern/dismissed-concern JSON schema, deduplication and conflict resolution
+logic, severity calibration guide, and report generation format) is derived
+from Sashiko's review pipeline as implemented in src/worker/prompts.rs and
+src/worker/stage.rs of the Sashiko project.
+
+The file prompts/severity.md is reproduced from
+third_party/prompts/kernel/severity.md in the Sashiko project.
+
+--------------------------------------------------------------------------------
+review-prompts - AI review prompts for Linux kernel development
+Copyright (c) 2025 Chris Mason
+Licensed under the MIT License
+https://github.com/masoncl/review-prompts
+
+Included as a Git submodule at third_party/review-prompts. These prompts
+provide per-subsystem and generic kernel review knowledge including
+technical-patterns.md, callstack.md, false-positive-guide.md,
+inline-template.md, and subsystem-specific guides.
+
+The generic review guides in prompts/ (technical-patterns-generic.md,
+callstack-generic.md, false-positive-guide-generic.md, and
+inline-template-generic.md) are derived from the kernel-specific
+originals in the review-prompts project.
