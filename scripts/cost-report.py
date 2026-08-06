@@ -161,6 +161,16 @@ def extract_commit_issues(db, orchestrator_id):
                         if "(" in parts and ")" in parts:
                             severity = parts.split("(")[1].split(")")[0]
                         return count, severity
+            # New format: REVIEW COMPLETE: <sha> "<subject>" - N issue(s) (severity)
+            if "REVIEW COMPLETE:" in text:
+                for line in text.split("\n"):
+                    if "REVIEW COMPLETE:" in line and "issue" in line:
+                        tail = line.split(" - ")[-1]  # "0 issues (none)"
+                        count = int(tail.split()[0])
+                        severity = "unknown"
+                        if "(" in tail and ")" in tail:
+                            severity = tail.split("(")[1].split(")")[0]
+                        return count, severity
         except (json.JSONDecodeError, ValueError):
             pass
     return -1, "unknown"
