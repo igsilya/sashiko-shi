@@ -7,16 +7,12 @@ hidden: true
 temperature: 0.0
 steps: 500
 permission:
+  "*": deny
   edit:
     "*": deny
     ".sashiko-shi/**": allow
-  bash: deny
-  task: deny
   read: allow
   glob: allow
-  grep: deny
-  doom_loop: deny
-  external_directory: deny
 ---
 
 # Stage 8: Deduplication and Consolidation

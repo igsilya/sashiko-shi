@@ -7,14 +7,7 @@ hidden: true
 temperature: 0.0
 steps: 500
 permission:
-  edit: deny
-  bash: deny
-  task: deny
-  read: deny
-  glob: deny
-  grep: deny
-  doom_loop: deny
-  external_directory: deny
+  "*": deny
 ---
 
 # Subsystem Guide Pre-screener

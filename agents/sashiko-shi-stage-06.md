@@ -7,6 +7,7 @@ hidden: true
 temperature: 0.3
 steps: 500
 permission:
+  "*": deny
   edit:
     "*": deny
     ".sashiko-shi/**": allow
@@ -30,11 +31,9 @@ permission:
     "cat *": allow
     "ls *": allow
     "stat *": allow
-  task: deny
   read: allow
   glob: allow
   grep: allow
-  doom_loop: deny
   external_directory:
     "*": deny
     "{{SASHIKO_SHI_DIR}}/**": allow

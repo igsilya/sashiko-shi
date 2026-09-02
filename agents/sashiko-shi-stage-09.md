@@ -7,16 +7,11 @@ hidden: true
 temperature: 0.0
 steps: 500
 permission:
+  "*": deny
   edit:
     "*": deny
     ".sashiko-shi/**": allow
-  bash: deny
-  task: deny
   read: allow
-  glob: deny
-  grep: deny
-  doom_loop: deny
-  external_directory: deny
 ---
 
 # Stage 9: Concern / Dismissed-Concern Conflict Resolution
