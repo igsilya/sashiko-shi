@@ -86,6 +86,10 @@ Use the Read tool on "." to get the directory listing. Check:
 
 Call the `skill` tool to load the matching skill. Fall back to `generic`.
 
+The skill output lists supplementary file paths and a `<skill_files>`
+block. Do NOT read any of those files. You only extract and store their
+paths here; the stage agents read the files themselves.
+
 From the skill output, extract:
 - PROMPTS_DIR, SUBSYSTEM_INDEX, STAGE_SUPPLEMENTS
 - Paths to supplementary files (technical-patterns, callstack, locking,
@@ -112,8 +116,14 @@ CHECKPOINT STEP 2: Commit <sha> "<subject>" by <author>, COMMIT_DIR=<COMMIT_DIR>
 
 ### STEP 3: Collect file paths from skill
 
-Extract all file paths from the skill loaded in STEP 1. Do NOT read
-the files -- just store the paths. The stage agents will read them.
+Extract all file paths from the skill loaded in STEP 1. Do NOT read any
+of these supplement/reference files (shared-context, technical-patterns,
+callstack, locking, false-positive-guide, inline-template, severity, and
+the stage supplements) or anything listed in the skill's `<skill_files>`
+block -- just store the paths. The stage agents read those files.
+
+The SUBSYSTEM_INDEX is the ONLY skill-listed file you read (below),
+because its content is needed to build the prescreen prompt.
 
 From the skill's supplementary_files, store these paths:
 - SHARED_CONTEXT_PATH
