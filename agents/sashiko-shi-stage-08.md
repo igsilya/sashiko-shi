@@ -126,6 +126,24 @@ most 1500 characters, and never emit a JSON line longer than 1500
 characters. Later stages read this file with a tool that truncates any
 line over 2000 characters, so overlong values are silently lost.
 
+This file is often large (it aggregates every stage's concerns). Do NOT
+try to write the whole file in a single Write call -- the response length
+limit can cut it off, leaving invalid, truncated JSON that the next stage
+cannot parse. When the output is large (many concerns, or more than a few
+hundred lines), build the file incrementally:
+
+1. Write an initial skeleton first, e.g.:
+   `{"concerns": [`
+2. Append each concern (or a small batch) with a separate Edit call. Add
+   commas between array elements as needed.
+3. After the last concern, append `], "dismissed_concerns": [`, then
+   append the dismissed items the same way.
+4. Close the JSON with a final Edit: `]}`.
+5. Read the file back and confirm it is complete and valid JSON before
+   returning. If it looks truncated, continue appending.
+
+A single Write is fine when the output is small.
+
 Then return ONLY a one-line summary as your final message:
 
 ```

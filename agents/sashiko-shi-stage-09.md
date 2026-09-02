@@ -103,6 +103,21 @@ characters. If a preserved field exceeds that, condense it while keeping
 the substance. Later stages read this file with a tool that truncates any
 line over 2000 characters, so overlong values are silently lost.
 
+This file can be large. Do NOT try to write the whole file in a single
+Write call -- the response length limit can cut it off, leaving invalid,
+truncated JSON that the next stage cannot parse. When the output is large
+(many concerns, or more than a few hundred lines), build the file
+incrementally:
+
+1. Write an initial skeleton first: `{"concerns": [`
+2. Append each surviving concern (or a small batch) with a separate Edit
+   call. Add commas between array elements as needed.
+3. Close the JSON with a final Edit: `]}`.
+4. Read the file back and confirm it is complete and valid JSON before
+   returning. If it looks truncated, continue appending.
+
+A single Write is fine when the output is small.
+
 Then return ONLY a one-line summary as your final message:
 
 ```
