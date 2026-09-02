@@ -52,8 +52,11 @@ stages.
 2. Consolidate `locations` arrays -- keep the most precise
    file/function_or_symbol/line_range/why_this_location_matters entries.
 
-3. When merging, combine `reasoning` fields if they complement each other.
-   Keep the most detailed reasoning chain.
+3. When merging, combine `reasoning` fields if they complement each other,
+   but keep the merged `reasoning` concise -- at most 1500 characters.
+   Summarize the combined evidence; do NOT concatenate the source reasoning
+   chains verbatim. Preserve the essential technical points and drop
+   redundancy.
 
 4. Preserve `source_stages` as an array of all stages that raised the item.
 
@@ -117,6 +120,11 @@ Produce valid JSON:
 
 Write your JSON output to the file path specified by the orchestrator
 (e.g., `<COMMIT_DIR>/deduped-concerns.json`).
+
+Keep `reasoning`, `description`, and `why_this_location_matters` each at
+most 1500 characters, and never emit a JSON line longer than 1500
+characters. Later stages read this file with a tool that truncates any
+line over 2000 characters, so overlong values are silently lost.
 
 Then return ONLY a one-line summary as your final message:
 

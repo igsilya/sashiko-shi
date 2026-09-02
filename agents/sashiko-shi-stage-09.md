@@ -97,6 +97,12 @@ including `type`, `title`, `description`, `reasoning`, `preexisting`,
 Write your JSON output to the file path specified by the orchestrator
 (e.g., `<COMMIT_DIR>/resolved-concerns.json`).
 
+Keep `reasoning`, `description`, and `why_this_location_matters` each at
+most 1500 characters, and never emit a JSON line longer than 1500
+characters. If a preserved field exceeds that, condense it while keeping
+the substance. Later stages read this file with a tool that truncates any
+line over 2000 characters, so overlong values are silently lost.
+
 Then return ONLY a one-line summary as your final message:
 
 ```

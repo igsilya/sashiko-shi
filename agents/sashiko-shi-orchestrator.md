@@ -204,7 +204,10 @@ For each selected stage, the prompt MUST include:
    - Stages 1, 2: no stage supplement
 
 5. The instruction: "Read ALL files listed above, then write your
-   JSON output to the specified file path."
+   JSON output to the specified file path. Keep the reasoning,
+   description, and why_this_location_matters fields concise -- at most
+   1500 characters each -- and never write a JSON line longer than 1500
+   characters, since later stages cannot read lines over 2000 characters."
 
 Do NOT paste the patch diff or file content into stage prompts.
 Tell each stage to run `git show <sha>` to get the diff and use

@@ -70,3 +70,17 @@ When analyzing patches, use available tools to gather context:
 - Never use ALL CAPS
 - Vary your question phrasing
 - Be specific: name the exact variable, function, or resource involved
+
+## Output Length Limits
+
+Your JSON output is read by later pipeline stages using a tool that CANNOT
+read any line longer than 2000 characters -- longer lines are truncated and
+their content is lost. To stay safely within that limit:
+
+- Keep each free-text field concise. `reasoning`, `description`, and
+  `why_this_location_matters` must each be at most 1500 characters.
+- Do NOT write long essays. State the technical point and the concrete code
+  evidence, then stop. Summarize rather than narrate.
+- Never emit a single JSON line longer than 1500 characters. If a value is
+  approaching the limit, tighten the wording -- do not split it into invalid
+  JSON.

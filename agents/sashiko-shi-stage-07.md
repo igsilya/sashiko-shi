@@ -158,6 +158,11 @@ The orchestrator provides a file path in your prompt (e.g.,
 `<COMMIT_DIR>/stage-07-concerns.json`). After producing your JSON,
 write it to that file using the Edit/Write tool.
 
+Keep `reasoning`, `description`, and `why_this_location_matters` each at
+most 1500 characters, and never emit a JSON line longer than 1500
+characters. Later stages read this file with a tool that truncates any
+line over 2000 characters, so overlong values are silently lost.
+
 Then return ONLY a one-line summary as your final message:
 
 ```
