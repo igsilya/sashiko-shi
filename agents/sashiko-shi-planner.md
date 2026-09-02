@@ -17,6 +17,27 @@ of the optional analysis stages (4-7) are relevant to this patch.
 
 Stages 1-3 always run. You only decide about stages 4-7.
 
+## Input Contract
+
+You have NO tools. You cannot run git and you cannot read files. The
+COMPLETE patch diff must be present in this prompt -- that diff text is
+your only input.
+
+The diff is MISSING if the prompt contains only:
+- a commit message and/or a list of changed files, with no actual diff
+  hunks (no `@@ ... @@` hunk headers and no `+`/`-` content lines), or
+- an instruction to run `git show` (or any other command) to obtain it.
+
+If the diff is missing, do NOT guess and do NOT analyze the commit message.
+Return EXACTLY this JSON and nothing else:
+
+```json
+{"error": "MISSING_DIFF"}
+```
+
+The orchestrator will detect this and re-issue the request with the full
+diff included.
+
 ## Stage Descriptions
 
 - **Stage 4 (Resource management)**: Relevant if the patch touches ANY

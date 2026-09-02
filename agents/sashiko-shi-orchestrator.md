@@ -55,6 +55,17 @@ RULE 4: After each Task call, print a CHECKPOINT line confirming the call
 RULE 5: You MUST invoke stages 1-7 by sending MULTIPLE Task tool calls
         in a SINGLE message. One message, multiple Task blocks.
 
+RULE 6: The prescreen (STEP 4) and the planner (STEP 5) -- and ONLY these
+        two -- have NO git access and NO file access. For EACH of them you
+        MUST paste the COMPLETE, UNABRIDGED output of `git show <sha>` from
+        STEP 2 into its prompt -- every hunk and every `+`/`-` line, byte
+        for byte. NEVER substitute a summary, the commit message, the
+        changed-file list, or an instruction like "run git show" -- they
+        cannot fetch the diff and will fail. The diff text is their ONLY
+        input. This rule does NOT apply to the stage agents (STEP 6): they
+        run `git show <sha>` themselves, so do NOT paste the diff into
+        stage prompts.
+
 VIOLATION: If you read the diff and start thinking "this code has a bug"
 or "this looks like a race condition" -- STOP. That is not your job.
 
@@ -133,19 +144,28 @@ CHECKPOINT STEP 3: Collected file paths from skill
 
 Skip if no SUBSYSTEM_INDEX exists. Otherwise:
 
+The prescreen has NO git or file access. You MUST paste the complete,
+unabridged `git show <sha>` output from STEP 2 -- all hunks, every `+`/`-`
+line. Do NOT paste a summary, the commit message, the file list, or an
+instruction to run git.
+
 ```
 Task:
   subagent_type: sashiko-shi-prescreen
   description: "Pre-screen subsystem guides"
   prompt: |
-    Here is the patch diff:
-    <paste full diff>
+    Here is the FULL patch diff (complete `git show` output, all hunks):
+    <paste the entire diff captured in STEP 2, verbatim>
 
     Here is the subsystem index:
     <paste SUBSYSTEM_INDEX content>
 
     Return JSON: {"selected_guides": ["guide1.md", ...]}
 ```
+
+If the returned JSON is `{"error": "MISSING_DIFF"}`, the prescreen did not
+receive the diff. Re-issue the SAME Task call, this time pasting the full
+diff text inline, then continue.
 
 From the returned JSON, build a list of full paths:
 SUBSYSTEM_GUIDE_PATHS = [PROMPTS_DIR/subsystem/<guide> for each guide]
@@ -157,17 +177,26 @@ CHECKPOINT STEP 4: Pre-screen complete, selected guides: <list>
 
 ### STEP 5: Plan stages -- TASK CALL REQUIRED
 
+The planner has NO git or file access. You MUST paste the complete,
+unabridged `git show <sha>` output from STEP 2 -- all hunks, every `+`/`-`
+line. Do NOT paste a summary, the commit message, the file list, or an
+instruction to run git.
+
 ```
 Task:
   subagent_type: sashiko-shi-planner
   description: "Plan relevant stages"
   prompt: |
-    Here is the patch diff:
-    <paste full diff>
+    Here is the FULL patch diff (complete `git show` output, all hunks):
+    <paste the entire diff captured in STEP 2, verbatim>
 
     Determine which of stages 4-7 are relevant.
     Return JSON: {"relevant_stages": [4, 5, ...]}
 ```
+
+If the returned JSON is `{"error": "MISSING_DIFF"}`, the planner did not
+receive the diff. Re-issue the SAME Task call, this time pasting the full
+diff text inline, then continue.
 
 Stages 1, 2, 3 always run. Add any from the planner's list.
 

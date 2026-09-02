@@ -19,6 +19,27 @@ the prompt.
 Your job is to determine which subsystem guide files are relevant to this
 patch.
 
+## Input Contract
+
+You have NO tools. You cannot run git and you cannot read files. The
+COMPLETE patch diff must be present in this prompt -- that diff text is
+your only input.
+
+The diff is MISSING if the prompt contains only:
+- a commit message and/or a list of changed files, with no actual diff
+  hunks (no `@@ ... @@` hunk headers and no `+`/`-` content lines), or
+- an instruction to run `git show` (or any other command) to obtain it.
+
+If the diff is missing, do NOT guess. Return EXACTLY this JSON and nothing
+else:
+
+```json
+{"error": "MISSING_DIFF"}
+```
+
+The orchestrator will detect this and re-issue the request with the full
+diff included.
+
 ## Process
 
 1. Parse the subsystem index. It contains a table mapping code paths, function
