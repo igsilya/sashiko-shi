@@ -200,7 +200,7 @@ if os.path.exists(cfg_path):
 
 cfg.setdefault("$schema", "https://opencode.ai/config.json")
 
-# Ensure subagent_depth >= 3
+# Ensure subagent_depth >= 3 for OpenCode v1.
 # The /sashiko-shi command runs the series coordinator as a subtask (depth 1),
 # which invokes the orchestrator per commit (depth 2),
 # which invokes stage subagents (depth 3).
@@ -210,6 +210,16 @@ if cfg.get("subagent_depth", 1) < 3:
     print("  Set subagent_depth=3")
 else:
     print("  subagent_depth already >= 3")
+
+
+# Ensure subagent_depth >= 3 for OpenCode v2 that puts it under "experimental".
+experimental = cfg.setdefault("experimental", {})
+if experimental.get("subagent_depth", 1) < 3:
+    experimental["subagent_depth"] = 3
+    changed = True
+    print("  Set experimental.subagent_depth=3")
+else:
+    print("  experimental.subagent_depth already >= 3")
 
 # Add reference to sashiko-shi clone
 # This auto-allows external directory access per OpenCode's design:
@@ -267,6 +277,7 @@ else
     echo "  WARNING: python3 not found, cannot patch opencode.json"
     echo "  Please manually add to $config_file:"
     echo '    "subagent_depth": 3,'
+    echo '    "experimental": {"subagent_depth": 3},'
     echo '    "references": {"sashiko-shi": {"path": "'"$SCRIPT_DIR"'"}}'
 fi
 
