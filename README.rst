@@ -23,11 +23,7 @@ Quick Start
 
     # Install into your project (arguments are optional, except the path)
     cd sashiko-shi
-    ./install.sh \
-        --provider=google-vertex-anthropic \
-        --model=google-vertex-anthropic/claude-opus-4-6@default \
-        --small-model=google-vertex-anthropic/claude-sonnet-4-6@default \
-        /path/to/project
+    ./install.sh /path/to/project
 
     # Run OpenCode and review a commit
     cd /path/to/project
